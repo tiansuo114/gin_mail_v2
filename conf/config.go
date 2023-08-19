@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
@@ -10,31 +9,39 @@ import (
 var Config *Conf
 
 type Conf struct {
-	EncryptSecret *EncryptSecret `yaml:"encryptSecret"`
-	PhotoPath     *PhotoPath     `yaml:"photoPath"`
-	System        *System        `yaml:"system"`
-	Mysql         *Mysql         `yaml:"mysql"`
-	Redis         *Redis         `yaml:"redis"`
-	Cache         *Cache         `yaml:"cache"`
-	Email         *Email         `yaml:"email"`
+	System        System        `yaml:"system"`
+	Database      Database      `yaml:"database"`
+	Redis         Redis         `yaml:"redis"`
+	Cache         Cache         `yaml:"cache"`
+	Email         Email         `yaml:"email"`
+	EncryptSecret EncryptSecret `yaml:"encryptSecret"`
+	PhotoPath     PhotoPath     `yaml:"photoPath"`
 }
 
-type Mysql struct {
-	UserName string `yaml:"userName"`
-	Password string `yaml:"password"`
-	Charset  string `yaml:"charset"`
+type System struct {
+	HttpPort    string  `yaml:"HttpPort"`
+	Host        string  `yaml:"Host"`
+	UploadModel string  `yaml:"UploadModel"`
+	Domain      string  `yaml:"domain"`
+	Version     float64 `yaml:"version"`
+	Env         string  `yaml:"env"`
+}
+
+type Database struct {
 	Dialect  string `yaml:"dialect"`
 	DbHost   string `yaml:"dbHost"`
 	DbPort   string `yaml:"dbPort"`
+	UserName string `yaml:"userName"`
+	Password string `yaml:"password"`
 	DbName   string `yaml:"dbName"`
 }
 
 type Redis struct {
+	RedisDbName   int    `yaml:"redisDbName"`
 	RedisHost     string `yaml:"redisHost"`
 	RedisPort     int    `yaml:"redisPort"`
 	RedisPassword int    `yaml:"redisPassword"`
 	RedisNetwork  string `yaml:"redisNetwork"`
-	RedisDbName   int    `yaml:"redisDbName"`
 }
 
 type Cache struct {
@@ -63,18 +70,8 @@ type PhotoPath struct {
 	AvatarPath  string `yaml:"AvatarPath"`
 }
 
-type System struct {
-	Host        string  `yaml:"Host"`
-	UploadModel string  `yaml:"UploadModel"`
-	Domain      string  `yaml:"domain"`
-	Version     float64 `yaml:"version"`
-	Env         string  `yaml:"env"`
-	HttpPort    string  `yaml:"HttpPort"`
-}
-
-func LoadYamlConfig() {
+func loadYamlConfig() {
 	absPath, err := filepath.Abs("conf/config.yaml")
-	fmt.Println("absPath:", absPath)
 	dataBytes, err := os.ReadFile(absPath)
 	if err != nil {
 		panic("读取配置文件失败" + err.Error())
@@ -86,4 +83,8 @@ func LoadYamlConfig() {
 	}
 
 	Config = &conf_to_load
+}
+
+func init() {
+	loadYamlConfig()
 }

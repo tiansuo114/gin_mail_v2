@@ -1,0 +1,2 @@
+time="2023-08-23 16:16:03" level=error msg="[Error] error level log)mongo: no documents in result" file="E:/Github/gin_mail_v2/model/dao/db_service.go" funcName=dao.FindOne line=90
+time="2023-08-23 16:16:03" level=error msg="[Error] error level log)mongo: no documents in result" file="E:/Github/gin_mail_v2/model/dao/db_service.go" funcName=dao.UpdateOne line=106
